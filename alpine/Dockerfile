@@ -18,9 +18,9 @@ RUN set -ex \
   \
   && apk add --no-cache --virtual .rundeps \
     curl \
-    #pcre-dev \
-    #graphviz-dev \
-    #json-c-dev \
+    pcre-dev \
+    # graphviz-dev \
+    # json-c-dev \
   \
   && apk add --no-cache --virtual .builddeps \
     unzip \
