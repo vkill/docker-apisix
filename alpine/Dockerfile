@@ -43,13 +43,13 @@ RUN set -ex \
   && unzip apisix.zip -d /usr/src \
   && rm apisix.zip \
   \
-  && cd "/usr/src/apisix-${APISIX_VERSION}" \
+  && cd "/usr/src/apisix-`echo ${APISIX_VERSION} | sed 's/^v//'`" \
   \
   && make dev \
   && make install \
   \
   && cd / \
-  && rm -r "/usr/src/apisix-${APISIX_VERSION}" \
+  && rm -r "/usr/src/apisix-`echo ${APISIX_VERSION} | sed 's/^v//'`" \
   \
   && luarocks install lua-resty-template \
   && luarocks install lua-resty-etcd \
