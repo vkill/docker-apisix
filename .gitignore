@@ -1,0 +1,2 @@
+/apisix/logs/*.log
+!/apisix/logs/.keep

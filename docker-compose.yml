@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  apisix:
+    image: apisix:dev-alpine
+    volumes:
+      - ./apisix/config/config.yaml:/usr/local/apisix/conf/config.yaml
+      - ./apisix/logs:/usr/local/apisix/logs
+    depends_on:
+      - etcd
+    network_mode: "host"
+
+  etcd:
+    image: gcr.io/etcd-development/etcd
+    command: /usr/local/bin/etcd --advertise-client-urls http://0.0.0.0:2379 --listen-client-urls http://0.0.0.0:2379
+    networks:
+      - apisix
+
+networks:
+  - apisix

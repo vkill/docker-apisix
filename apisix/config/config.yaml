@@ -1,0 +1,19 @@
+apisix:
+  node_listen: 9080
+  node_ssl_listen: 9443
+  enable_heartbeat: true
+  enable_admin: true
+  allow_admin: "127.0.0.1/24"
+  port_admin: 9001
+
+etcd:
+  host: "http://etcd:2379"
+  prefix: "/apisix"
+  timeout: 1
+
+plugins:
+  - limit-conn
+  - limit-count
+  - limit-req
+  - node-status
+  - prometheus

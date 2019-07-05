@@ -2,9 +2,15 @@ FROM openresty/openresty:alpine-fat
 
 MAINTAINER vkill <vkill.net@gmail.com>
 
-ENV APISIX_VERSION master # or v0.5
+# or master
+ARG APISIX_VERSION=v0.5
+ENV APISIX_VERSION=${APISIX_VERSION}
+
 ENV APISIX_DOWNLOAD_URL https://github.com/iresty/apisix/archive/${APISIX_VERSION}.zip
-ENV APISIX_DOWNLOAD_SHA256 SKIP # or e6f14dcd58c5ba286ee48f8482a669893560bc2fbc90d6bf52881493ce720fb7
+
+# or SKIP
+ARG APISIX_DOWNLOAD_SHA256=e6f14dcd58c5ba286ee48f8482a669893560bc2fbc90d6bf52881493ce720fb7
+ENV APISIX_DOWNLOAD_SHA256=${APISIX_DOWNLOAD_SHA256}
 
 RUN set -ex \
   \
@@ -12,9 +18,9 @@ RUN set -ex \
   \
   && apk add --no-cache --virtual .rundeps \
     curl \
-    pcre-dev \
-    graphviz-dev \
-    json-c-dev \
+    #pcre-dev \
+    #graphviz-dev \
+    #json-c-dev \
   \
   && apk add --no-cache --virtual .builddeps \
     unzip \
