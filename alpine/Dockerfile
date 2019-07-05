@@ -18,8 +18,6 @@ RUN set -ex \
   \
   && apk add --no-cache --virtual .rundeps \
     curl \
-    # graphviz-dev \
-    # json-c-dev \
   \
   && apk add --no-cache --virtual .builddeps \
     unzip \
@@ -33,6 +31,8 @@ RUN set -ex \
     pkgconfig \
     cmake \
     pcre-dev \
+    # graphviz-dev \
+    # json-c-dev \
   \
   && ln -sf /usr/local/openresty/luajit/bin/luajit /usr/bin/lua \
   \
