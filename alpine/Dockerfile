@@ -12,6 +12,8 @@ ENV APISIX_DOWNLOAD_URL https://github.com/iresty/apisix/archive/${APISIX_VERSIO
 ARG APISIX_DOWNLOAD_SHA256=e6f14dcd58c5ba286ee48f8482a669893560bc2fbc90d6bf52881493ce720fb7
 ENV APISIX_DOWNLOAD_SHA256=${APISIX_DOWNLOAD_SHA256}
 
+ARG RESTY_PCRE_VERSION="8.42"
+
 RUN set -ex \
   \
   && sed -i 's!dl-cdn.alpinelinux.org!mirrors.aliyun.com!' /etc/apk/repositories \
@@ -30,11 +32,18 @@ RUN set -ex \
     libtool \
     pkgconfig \
     cmake \
-    pcre-dev \
-    # graphviz-dev \
-    # json-c-dev \
   \
   && ln -sf /usr/local/openresty/luajit/bin/luajit /usr/bin/lua \
+  \
+  && curl -fSL https://ftp.pcre.org/pub/pcre/pcre-${RESTY_PCRE_VERSION}.tar.gz -o pcre-${RESTY_PCRE_VERSION}.tar.gz \
+  && tar xzf pcre-${RESTY_PCRE_VERSION}.tar.gz -C /tmp \
+  && rm -rf pcre-${RESTY_PCRE_VERSION}.tar.gz \
+  && cd /tmp/pcre-${RESTY_PCRE_VERSION} \
+  && ./configure --enable-jit --enable-utf --enable-unicode-properties \
+  && make \
+  && sudo make install \
+  && cd / \
+  && rm -rf /tmp/pcre-${RESTY_PCRE_VERSION} \
   \
   && wget -O apisix.zip "${APISIX_DOWNLOAD_URL}" \
   && [[ "${APISIX_DOWNLOAD_SHA256}" = "SKIP" ]] && echo "SKIP" || (echo "${APISIX_DOWNLOAD_SHA256} *apisix.zip" | sha256sum -c -) \
