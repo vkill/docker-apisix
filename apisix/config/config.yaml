@@ -7,7 +7,7 @@ apisix:
   port_admin: 9001
 
 etcd:
-  host: "http://etcd:2379"
+  host: "http://127.0.0.1:12379"
   prefix: "/apisix"
   timeout: 1
 

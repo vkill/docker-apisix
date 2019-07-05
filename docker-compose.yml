@@ -13,8 +13,10 @@ services:
   etcd:
     image: gcr.io/etcd-development/etcd
     command: /usr/local/bin/etcd --advertise-client-urls http://0.0.0.0:2379 --listen-client-urls http://0.0.0.0:2379
+    ports:
+      - 127.0.0.1:12379:2379
     networks:
       - apisix
 
 networks:
-  - apisix
+  apisix:
