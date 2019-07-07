@@ -1,4 +1,7 @@
-FROM openresty/openresty:alpine-fat
+ARG RESTY_IMAGE_BASE="vkill/openresty"
+ARG RESTY_IMAGE_TAG="alpine-fat-with-pcre"
+
+FROM ${RESTY_IMAGE_BASE}:${RESTY_IMAGE_TAG}
 
 MAINTAINER vkill <vkill.net@gmail.com>
 
@@ -11,8 +14,6 @@ ENV APISIX_DOWNLOAD_URL https://github.com/iresty/apisix/archive/${APISIX_VERSIO
 # or SKIP
 ARG APISIX_DOWNLOAD_SHA256=e6f14dcd58c5ba286ee48f8482a669893560bc2fbc90d6bf52881493ce720fb7
 ENV APISIX_DOWNLOAD_SHA256=${APISIX_DOWNLOAD_SHA256}
-
-ARG RESTY_PCRE_VERSION="8.42"
 
 RUN set -ex \
   \
@@ -35,16 +36,6 @@ RUN set -ex \
   \
   && ln -sf /usr/local/openresty/luajit/bin/luajit /usr/bin/lua \
   \
-  && curl -fSL https://ftp.pcre.org/pub/pcre/pcre-${RESTY_PCRE_VERSION}.tar.gz -o pcre-${RESTY_PCRE_VERSION}.tar.gz \
-  && tar xzf pcre-${RESTY_PCRE_VERSION}.tar.gz -C /tmp \
-  && rm -rf pcre-${RESTY_PCRE_VERSION}.tar.gz \
-  && cd /tmp/pcre-${RESTY_PCRE_VERSION} \
-  && ./configure --enable-jit --enable-utf --enable-unicode-properties \
-  && make \
-  && sudo make install \
-  && cd / \
-  && rm -rf /tmp/pcre-${RESTY_PCRE_VERSION} \
-  \
   && wget -O apisix.zip "${APISIX_DOWNLOAD_URL}" \
   && [[ "${APISIX_DOWNLOAD_SHA256}" = "SKIP" ]] && echo "SKIP" || (echo "${APISIX_DOWNLOAD_SHA256} *apisix.zip" | sha256sum -c -) \
   \
@@ -56,15 +47,14 @@ RUN set -ex \
   \
   && make dev \
   && make install \
+  && cp -r deps /usr/local/apisix/ \
+  && sed -i '/pcall(require, "cjson")$/,/^end$/s/return$/-- return/' /usr/bin/apisix \
   \
   && cd / \
   && rm -r "/usr/src/apisix-`echo ${APISIX_VERSION} | sed 's/^v//'`" \
-  \
-  && luarocks install lua-resty-template \
-  && luarocks install lua-resty-etcd \
   \
   && apk del .builddeps
 
 WORKDIR /usr/local/apisix
 
-CMD ["/usr/bin/apisix", "start"]
+CMD ["sh", "-c", "/usr/bin/apisix init && /usr/bin/apisix init_etcd && /usr/local/openresty/bin/openresty -p /usr/local/apisix -g 'daemon off;'"]
