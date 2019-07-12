@@ -34,6 +34,7 @@ RUN set -ex \
     pkgconfig \
     cmake \
   \
+  && ln -sf /usr/local/openresty/luajit/bin/luajit /usr/bin/lua \
   && mkdir -p /usr/local/lib/pkgconfig \
   && mkdir -p /usr/local/include \
   && ln -sf /usr/local/openresty/pcre/lib/libpcre.so /usr/local/lib/libpcre.so \
