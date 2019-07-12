@@ -1,5 +1,6 @@
 ARG RESTY_IMAGE_BASE="openresty/openresty"
 ARG RESTY_IMAGE_TAG="alpine-fat"
+# require alpine-fat >= 1.15.8.1-3
 FROM ${RESTY_IMAGE_BASE}:${RESTY_IMAGE_TAG}
 
 MAINTAINER vkill <vkill.net@gmail.com>
@@ -7,7 +8,7 @@ MAINTAINER vkill <vkill.net@gmail.com>
 #
 # docker build -t apisix:v0.5-alpine -f alpine/Dockerfile alpine
 # docker build -t apisix:dev-alpine --build-arg APISIX_VERSION=master --build-arg APISIX_DOWNLOAD_SHA256=SKIP -f alpine/Dockerfile alpine
-# docker build -t apisix:my-alpine --build-arg APISIX_GITHUB_REPO=https://github.com/YOU/apisix APISIX_VERSION=BRANCHNAME --build-arg APISIX_DOWNLOAD_SHA256=SKIP -f alpine/Dockerfile alpine
+# docker build -t apisix:my-alpine --build-arg APISIX_GITHUB_REPO=https://github.com/YOU/apisix --build-arg APISIX_VERSION=BRANCHNAME --build-arg APISIX_DOWNLOAD_SHA256=SKIP -f alpine/Dockerfile alpine
 #
 ARG APISIX_VERSION=v0.5
 ENV APISIX_VERSION=${APISIX_VERSION}
