@@ -34,9 +34,11 @@ RUN set -ex \
     pkgconfig \
     cmake \
   \
-  && ln -sf /usr/local/openresty/pcre/lib/libpcre.so /usr/lib/libpcre.so \
-  && ln -sf /usr/local/openresty/pcre/include/pcre.h /usr/include/pcre.h \
-  && ln -sf /usr/local/openresty/luajit/bin/luajit /usr/bin/lua \
+  && mkdir -p /usr/local/lib/pkgconfig \
+  && mkdir -p /usr/local/include \
+  && ln -sf /usr/local/openresty/pcre/lib/libpcre.so /usr/local/lib/libpcre.so \
+  && ln -sf /usr/local/openresty/pcre/lib/pkgconfig/libpcre.pc /usr/local/lib/pkgconfig/libpcre.pc \
+  && ln -sf /usr/local/openresty/pcre/include/pcre.h /usr/local/include/pcre.h \
   \
   && wget -O apisix.zip "${APISIX_DOWNLOAD_URL}" \
   && [[ "${APISIX_DOWNLOAD_SHA256}" = "SKIP" ]] && echo "SKIP" || (echo "${APISIX_DOWNLOAD_SHA256} *apisix.zip" | sha256sum -c -) \
