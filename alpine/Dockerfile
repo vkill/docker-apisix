@@ -6,18 +6,19 @@ FROM ${RESTY_IMAGE_BASE}:${RESTY_IMAGE_TAG}
 MAINTAINER vkill <vkill.net@gmail.com>
 
 # or master
-ARG APISIX_VERSION=v0.5
+ARG APISIX_VERSION=patch-1
 ENV APISIX_VERSION=${APISIX_VERSION}
 
-ENV APISIX_DOWNLOAD_URL https://github.com/iresty/apisix/archive/${APISIX_VERSION}.zip
+ARG APISIX_GITHUB_REPO=https://github.com/vkill/apisix
+ENV APISIX_DOWNLOAD_URL ${APISIX_GITHUB_REPO}/archive/${APISIX_VERSION}.zip
 
 # or SKIP
-ARG APISIX_DOWNLOAD_SHA256=e6f14dcd58c5ba286ee48f8482a669893560bc2fbc90d6bf52881493ce720fb7
+ARG APISIX_DOWNLOAD_SHA256=SKIP
 ENV APISIX_DOWNLOAD_SHA256=${APISIX_DOWNLOAD_SHA256}
 
 RUN set -ex \
   \
-#  && sed -i 's!dl-cdn.alpinelinux.org!mirrors.aliyun.com!' /etc/apk/repositories \
+  && sed -i 's!dl-cdn.alpinelinux.org!mirrors.aliyun.com!' /etc/apk/repositories \
   \
   && apk add --no-cache --virtual .rundeps \
     curl \

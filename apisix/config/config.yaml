@@ -5,6 +5,10 @@ apisix:
   enable_admin: true
   allow_admin: "127.0.0.1/24"
   port_admin: 9001
+  allow_admin: "127.0.0.1"
+  real_ip_header: "X-Real-IP"
+  real_ip_from:
+    - 127.0.0.1
 
 etcd:
   host: "http://127.0.0.1:12379"
