@@ -1,19 +1,19 @@
 ARG RESTY_IMAGE_BASE="openresty/openresty"
 ARG RESTY_IMAGE_TAG="alpine-fat"
-
 FROM ${RESTY_IMAGE_BASE}:${RESTY_IMAGE_TAG}
 
 MAINTAINER vkill <vkill.net@gmail.com>
 
-# or master
-ARG APISIX_VERSION=patch-1
+#
+# docker build -t apisix:v0.5-alpine -f alpine/Dockerfile alpine
+# docker build -t apisix:dev-alpine --build-arg APISIX_VERSION=master --build-arg APISIX_DOWNLOAD_SHA256=SKIP -f alpine/Dockerfile alpine
+# docker build -t apisix:my-alpine --build-arg APISIX_GITHUB_REPO=https://github.com/YOU/apisix APISIX_VERSION=BRANCHNAME --build-arg APISIX_DOWNLOAD_SHA256=SKIP -f alpine/Dockerfile alpine
+#
+ARG APISIX_VERSION=v0.5
 ENV APISIX_VERSION=${APISIX_VERSION}
-
-ARG APISIX_GITHUB_REPO=https://github.com/vkill/apisix
+ARG APISIX_GITHUB_REPO=https://github.com/apisix/apisix
 ENV APISIX_DOWNLOAD_URL ${APISIX_GITHUB_REPO}/archive/${APISIX_VERSION}.zip
-
-# or SKIP
-ARG APISIX_DOWNLOAD_SHA256=SKIP
+ARG APISIX_DOWNLOAD_SHA256=e6f14dcd58c5ba286ee48f8482a669893560bc2fbc90d6bf52881493ce720fb7
 ENV APISIX_DOWNLOAD_SHA256=${APISIX_DOWNLOAD_SHA256}
 
 RUN set -ex \
