@@ -1,5 +1,5 @@
-ARG RESTY_IMAGE_BASE="vkill/openresty"
-ARG RESTY_IMAGE_TAG="alpine-fat-with-pcre"
+ARG RESTY_IMAGE_BASE="openresty/openresty"
+ARG RESTY_IMAGE_TAG="alpine-fat"
 
 FROM ${RESTY_IMAGE_BASE}:${RESTY_IMAGE_TAG}
 
@@ -17,7 +17,7 @@ ENV APISIX_DOWNLOAD_SHA256=${APISIX_DOWNLOAD_SHA256}
 
 RUN set -ex \
   \
-  && sed -i 's!dl-cdn.alpinelinux.org!mirrors.aliyun.com!' /etc/apk/repositories \
+#  && sed -i 's!dl-cdn.alpinelinux.org!mirrors.aliyun.com!' /etc/apk/repositories \
   \
   && apk add --no-cache --virtual .rundeps \
     curl \
@@ -34,6 +34,8 @@ RUN set -ex \
     pkgconfig \
     cmake \
   \
+  && ln -sf /usr/local/openresty/pcre/lib/libpcre.so /usr/lib/libpcre.so \
+  && ln -sf /usr/local/openresty/pcre/include/pcre.h /usr/include/pcre.h \
   && ln -sf /usr/local/openresty/luajit/bin/luajit /usr/bin/lua \
   \
   && wget -O apisix.zip "${APISIX_DOWNLOAD_URL}" \
