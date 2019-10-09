@@ -1,0 +1,5 @@
+v0.6 改成 0.6
+建 docker-compose.alpine.yml
+建 test 目录，分别 curl 测试 web_foo web_bar web_bar_v2
+test 目录下 docker-compose.test.yml
+PLATFORM=alpine REBUILD=1 ruby test/test_*.rb
